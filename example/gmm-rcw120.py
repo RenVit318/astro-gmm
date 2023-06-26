@@ -5,12 +5,23 @@
  Example script showing the application of astro-gmm to RCW 120
 """
 
-#from ..src.fit import fit_model
-#from ..src.main import full_run
-from .. import *
+# Weird PATH things, should be a better way to fix this?
+from pathlib import Path
+import os
+import sys
+ex_dir = os.path.dirname(os.path.abspath(__file__))
+git_dir = str(Path(ex_dir).parents[0])
+src_dir = os.path.join(git_dir, 'src')
+sys.path.append(src_dir)
 
+# This module
+from fit import fit_model
+from main import full_run
+
+# External
 from astropy.io import fits
 import json
+
 
 def main():
     hdul = fits.open('../example/rcw120-cii-20arcsec-0-5kms.fits')

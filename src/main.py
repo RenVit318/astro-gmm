@@ -10,6 +10,7 @@ def full_run(hdul, fit_params, plot_params):
                      Any keyword arguments not provided are assumed 'None' or 0 to assist argument contamination discovery
        - plot_params: Describes which plots should be made, can also contain kwargs given to matplotlib
     """
+    print('hello world')
     return
     # Following the steps of the paper
     # 1. Cut out dimensions outside of velocity range
