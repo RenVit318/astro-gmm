@@ -1,2 +1,8 @@
-{"norm_method": "original",
- "norm_thresh": "3rms"}
+{"source_name": "rcw120",
+ "norm_method": "original",
+ "norm_thresh": "3rms",
+ "vel_min": "-30",
+ "vel_max": "+10",
+ "save_txt": "none",
+ "save_gmm": "True",
+ "save_dmap": "True"}

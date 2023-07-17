@@ -21,7 +21,6 @@ def make_covar(num_features, fit_params):
 
 def fit_model(data, fit_params):
     """"""
-    print('hello world')
     # Set up the covariance matrix and the GMM object
     num_features = data.shape[1]  # MIGHT CHANGE!!
     covar = make_covar(num_features, fit_params)
@@ -34,4 +33,9 @@ def fit_model(data, fit_params):
 
 
 def make_domain_map():
+    """"""
+    # Copy code from Notebook here
     pass
+    
+    if fit_params['save_dmap']:
+        np.save(RPATH+'_'+fit_params['source_name']+'_'+fit_params['save_txt']+'_dmap.npy')

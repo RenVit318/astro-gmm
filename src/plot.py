@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
- Visualize the PyGMMis results
+ Visualize the PyGMMis results following style of Tiwari+23
 """
 
 def set_styles():
