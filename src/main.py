@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from preprocess import remove_nans, reduce_dimensions, normalize
-from fit import fit_model
+from fit import fit_model, make_domain_map
+from plot import *
 
 import astrokit # https://github.com/skabanovic/astrokit
 import numpy as np
@@ -18,6 +19,7 @@ def full_run(hdul, params):
     """
     # Check if additional information was given for file saving. If not make it based on parameters
     print(f"Starting full GMMis run for {params['source_name']}")
+    save_check(params)
 
     # Following the steps of the paper
     # 1. Cut out dimensions outside of velocity range
@@ -27,21 +29,18 @@ def full_run(hdul, params):
 
     # 2. Apply dimensionality redution and normalization
     # This takes a hdul object as input and returns a numpy array
-    print(chop_hdul[0].data.shape)
     masked_data = remove_nans(chop_hdul)
-    print(masked_data.shape)
-    input() 
     reduced_data = reduce_dimensions(masked_data, params)
     normed_data = normalize(reduced_data, params)
-    input('normalized data. PRESS ENTER')
+
     # 3. Fit the GMM model
     # This returns a PyGMMis object containing all weights, means and covariances
-    input('Fit Model?')
     gmm = fit_model(normed_data, params)
 
     # 4. Do plotting things
-    dmap = make_domain_map(gmm, chop_hdul, params)
+    dmap, _ = make_domain_map(gmm, normed_data, hdul, params)
 
+    set_styles()
     plot_domain_map(dmap, params)
     #plot_average_spectra(gmm, 
 
