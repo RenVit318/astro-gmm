@@ -10,24 +10,24 @@ import numpy as np
 import pygmmis
 
 
-def make_covar(num_features, fit_params):
+def make_covar(num_features, params):
     """Make the covariance matrix depending on rms and given type"""
     # update to match-case?
-    method = fit_params['covar_method']
+    method = params['covar_method']
 
     if method == 'diag':
-        return np.eye(num_features) * (fit_params['rms']**2)
+        return np.eye(num_features) * (params['rms']**2)
 
 
-def fit_model(data, fit_params):
+def fit_model(data, params):
     """"""
     # Set up the covariance matrix and the GMM object
     num_features = data.shape[1]  # MIGHT CHANGE!!
-    covar = make_covar(num_features, fit_params)
-    gmm = pygmmis(K=fit_params['num_clusters'], D=num_features)
+    covar = make_covar(num_features, params)
+    gmm = pygmmis(K=params['num_clusters'], D=num_features)
 
     # Actually fit the model using the adjusted EM algorithm (Melchior & Goulding 2018)
-    logL, U = pygmmis.fit(gmm, data, covar=covar, w=fit_params['w'], cutoff=fit_params['cutoff'])
+    logL, U = pygmmis.fit(gmm, data, covar=covar, w=params['w'], cutoff=params['cutoff'])
 
     return gmm
 
@@ -37,5 +37,5 @@ def make_domain_map():
     # Copy code from Notebook here
     pass
     
-    if fit_params['save_dmap']:
-        np.save(RPATH+'_'+fit_params['source_name']+'_'+fit_params['save_txt']+'_dmap.npy')
+    if params['save_dmap']:
+        np.save(RPATH+'_'+params['source_name']+'_'+params['save_txt']+'_dmap.npy')

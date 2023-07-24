@@ -5,4 +5,5 @@
  "vel_max": "+10",
  "save_txt": "none",
  "save_gmm": "True",
- "save_dmap": "True"}
+ "save_dmap": "True",
+ "save_figs": "True"}

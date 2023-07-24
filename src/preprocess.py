@@ -16,7 +16,7 @@ def reduce_dimensions(hdul, fit_params):
     Methods ... are adjusted from functions in astrokit by Dr. S. Kabanovic
     """
 
-    method = fit_params['reduce_method']
+    method = params['reduce_method']
     N = hdul[0].data.shape[1] * hdul[0].data.shape[2]
     M = hdul[0].data.shape[0]
 
@@ -33,7 +33,7 @@ def normalize(data, fit_params):
 
     Methods ... are adjusted from functions in astrokit by Dr. S. Kabanovic
     """
-    method = fit_params['norm_method']
+    method = params['norm_method']
 
     # Could update to match-case but requires Python >3.10
     if method == 'none':
