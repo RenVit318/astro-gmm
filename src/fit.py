@@ -16,19 +16,20 @@ def make_covar(num_features, params):
     method = params['covar_method']
 
     if method == 'diag':
-        return np.eye(num_features) * (params['rms']**2)
+        return np.eye(num_features) * (np.float64(params['rms'])**2)
 
 
 def fit_model(data, params):
     """"""
     # Set up the covariance matrix and the GMM object
     num_features = data.shape[1]  # MIGHT CHANGE!!
-    covar = make_covar(num_features, params)
-    gmm = pygmmis(K=params['num_clusters'], D=num_features)
-
+    covar = make_covar(num_features, params)  
+    print(covar)
+    gmm = pygmmis.GMM(K=int(params['num_clusters']), D=num_features)
+    print('fitting..')
     # Actually fit the model using the adjusted EM algorithm (Melchior & Goulding 2018)
-    logL, U = pygmmis.fit(gmm, data, covar=covar, w=params['w'], cutoff=params['cutoff'])
-
+    logL, U = pygmmis.fit(gmm, data, covar=covar, w=np.float64(params['w']), cutoff=np.float64(params['cutoff']))
+    print('done')
     return gmm
 
 
