@@ -25,7 +25,7 @@ def full_run(hdul, params):
                                    np.float64(params['vel_max']),
                                    hdul)  
 
-    # 2. Apply dimensionality reduction and normalization
+    # 2. Apply dimensionality redution and normalization
     # This takes a hdul object as input and returns a numpy array
     print(chop_hdul[0].data.shape)
     masked_data = remove_nans(chop_hdul)
