@@ -45,6 +45,22 @@ def fit_model(data, params):
     return gmm
 
 
+def load_model_with_params(fname):
+    """Load a previously fitted model and its corresponding fit parameters"""
+    F = np.load(fname)
+    
+    for k, v in F.items():
+        if k not in ['amp', 'covar', 'mean']:
+            print(f'{k}:\t{v}')
+    
+    gmm = pygmmis.GMM()
+    gmm.amp = F['amp']
+    gmm.mean = F['mean']
+    gmm.covar = F['covar']
+    
+    return gmm, F
+
+
 def make_domain_map(gmm, hdul, normed_data, params):
     """"""
 
