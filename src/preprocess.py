@@ -22,13 +22,21 @@ def reduce_dimensions(data, params):
     Returns an NxM numpy array where N is the number of data points and M the number of features
     """
 
+    # First cut away any dimensions with low RMS
+    rms_threshold = float(params['rms_threshold'])
+    if rms_threshold > 0:
+        rms_of_dim = np.sqrt(np.mean(data**2, axis=0))
+        rms_mask = rms_of_dim > (rms_threshold * float(params['rms']))
+        data = data[:, rms_mask]
+
+    # Then apply other dimension reduction method (if any)
     method = params['reduce_method']
 
     # Could update to match-case but requires Python >3.10
     if method == 'none':
-        return data  
-    elif method == 'rms_thresh':
-        return
+        return data 
+    else:
+        raise NotImplementedError(f"Unknown Dim Reduction Method: {params['reduce_method']}. Please check config file")
 
 
 
@@ -40,6 +48,8 @@ def normalize(data, params):
     # Could update to match-case but requires Python >3.10
     if method == 'none':
         return data
+    else:
+        raise NotImplementedError(f"Unknown Normalization Method: {params['norm_method']}. Please check config file")
 
 
 

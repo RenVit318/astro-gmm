@@ -19,7 +19,7 @@ def full_run(hdul, params):
     """
     # Check if additional information was given for file saving. If not make it based on parameters
     print(f"Starting full GMMis run for {params['source_name']}")
-    save_check(params)
+    params = save_check(params)
 
     # Following the steps of the paper
     # 1. Cut out dimensions outside of velocity range
@@ -38,11 +38,15 @@ def full_run(hdul, params):
     gmm = fit_model(normed_data, params)
 
     # 4. Do plotting things
-    dmap, _ = make_domain_map(gmm, normed_data, hdul, params)
+    dmap, ll_cube, component_idxs = make_domain_map(gmm, hdul, normed_data, params)
 
     set_styles()
-    plot_domain_map(dmap, params)
-    #plot_average_spectra(gmm, 
+    if params['save_figs']:    
+        plot_weights_map(gmm, dmap, component_idxs, params)
+        plot_domain_map(hdul, dmap, params)
+        plot_average_spectra(gmm, dmap, hdul, reduced_data, params)
+        
+        
 
 
 
@@ -51,11 +55,13 @@ def save_check(params):
     based on the input parameters."""
     
     if params['save_txt'] == 'none':
-        params['save_txt'] = f"{params['norm_method']}-{params['norm_thresh']}_{params['vel_min']}-{params['vel_max']}"
+        params['save_txt'] = f"N{params['num_clusters']}_{params['norm_method']}_{params['rms_threshold']}rms_{params['vel_min']}-{params['vel_max']}"
 
 
     print(f"Saving Files with text: {params['source_name']}_{params['save_txt']}")
     print(f" GMM\t{params['save_gmm']}\n dmap\t{params['save_dmap']}\n figs\t{params['save_figs']}")
+
+    return params
 
 
     

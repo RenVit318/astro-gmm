@@ -17,6 +17,8 @@ def make_covar(num_features, params):
 
     if method == 'diag':
         return np.eye(num_features) * (np.float64(params['rms'])**2)
+    else:
+        raise NotImplementedError(f"Unknown Covariance Method: {params['covar_method']}. Please check config file")
 
 
 def fit_model(data, params):
@@ -26,14 +28,24 @@ def fit_model(data, params):
     covar = make_covar(num_features, params)  
 
     gmm = pygmmis.GMM(K=int(params['num_clusters']), D=num_features)
-    print('fitting..')
+
+    # Fitting parameters
+    if 'rms' in params['w']: # e.g. '3rms' becomes 3 times RMS
+        w = float(params['w'][0:params['w'].find('r')]) * float(params['rms'])
+    else: # assumes it is a float
+        try:
+            w = float(params['w'])
+        except ValueError:
+            raise ValueError(f"Unknown value inserted for w: {params['w']}. Please check config file")
+
     # Actually fit the model using the adjusted EM algorithm (Melchior & Goulding 2018)
-    logL, U = pygmmis.fit(gmm, data, covar=covar, w=np.float64(params['w']), cutoff=np.float64(params['cutoff']))
-    print('done')
+    logL, U = pygmmis.fit(gmm, data, covar=covar, w=w, cutoff=np.float64(params['cutoff']))
+    gmm.save(f"{params['results_path']}GMM_{params['save_txt']}", **params) # params are included so one has all the information
+
     return gmm
 
 
-def make_domain_map(gmm, normed_data, hdul, params):
+def make_domain_map(gmm, hdul, normed_data, params):
     """"""
 
     # Initialize empty map which we fill with the likeliest component for each pixel
@@ -73,8 +85,30 @@ def make_domain_map(gmm, normed_data, hdul, params):
     for i in range(len(component_idxs)):
         dmap[dmap == component_idxs[i]] = new_vals[i]
 
-    if  params['save_dmap']:
-        np.save(params['source_name'] + '_' +  params['save_txt'] + '_dmap.npy', dmap)
+    # Potentially remove any unwanted components
+    if params['remove_comps'] != 'none':
+        print(f"Warning! Removing components {params['remove_comps']}")
 
-    return dmap, ll_cube
+        # convert the input of comma separated numbers to integers
+        comps = params['remove_comps'].split(',')
+        comps_int = [int(val) for val in comps] 
+
+        # Remove components from both the dmap and comp_idxs
+        for val in comps:
+            dmap[dmap == int(val)] = np.nan
+        component_idxs = np.delete(component_idxs, comps_int)
+
+
+        # Then reorder again so there are no gaps in the sequence and adjust component_idxs
+        uniques = np.unique(dmap) 
+        uniques = uniques[~np.isnan(uniques)] # exclude all NaNs
+        new_vals = np.arange(len(uniques)) 
+        for i in range(len(uniques)):
+            dmap[dmap == uniques[i]] = new_vals[i]
+
+
+    if params['save_dmap']:
+        np.save(f"{params['results_path']}{params['source_name']}_{params['save_txt']}_dmap.npy", dmap)
+
+    return dmap, ll_cube, component_idxs
 

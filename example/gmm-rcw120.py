@@ -25,12 +25,11 @@ import json
 
 
 def main():
-    hdul = fits.open('../example/rcw120-cii-20arcsec-0-5kms.fits')
-
     with open('../example/rcw120-params.txt') as f:
         fit_txt = f.read()
         params = json.loads(fit_txt)
 
+    hdul = fits.open(params['data_path']+params['hdul_name'])
     full_run(hdul, params)
 
 
