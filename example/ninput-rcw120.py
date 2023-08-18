@@ -59,10 +59,6 @@ def main():
 
     np.save(f"noutput_minn{params['min_n']}_maxn{parmas['max_n']}_step{params['stepsize_n']}.npy", n_output)
         
-    
-    
-
-
 
 if __name__ == '__main__':
     main()
