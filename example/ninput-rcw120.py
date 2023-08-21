@@ -16,10 +16,12 @@ sys.path.append(src_dir)
 ###
 
 # This module
-
+from preprocess import remove_nans, reduce_dimensions, normalize
+from fit import fit_model, make_domain_map
 
 # External
 from astropy.io import fits
+import astrokit
 import json
 import numpy as np
 
@@ -57,7 +59,7 @@ def main():
             dmap, _, _ = make_domain_map(gmm, hdul, normed_data, params)
             n_output[i][j] = np.nanmax(dmap) + 1        
 
-    np.save(f"noutput_minn{params['min_n']}_maxn{parmas['max_n']}_step{params['stepsize_n']}.npy", n_output)
+    np.save(f"noutput_minn{params['min_n']}_maxn{params['max_n']}_step{params['stepsize_n']}.npy", n_output)
         
 
 if __name__ == '__main__':
