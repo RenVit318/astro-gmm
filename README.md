@@ -1,8 +1,8 @@
 # Astro-GMM
 
-Repository implementing the PyGMMis (Melchior & Goudling 2018) method to astronomical data cubes of velocity resolved line observations. This implementation was introduced and tested by Tiwari et al. (in prep).
+Repository implementing the PyGMMis (Melchior & Goudling 2018) method to astronomical data cubes of velocity resolved line observations. This implementation is described extensively in Tiwari et al. (subm. to ApJ).
 
-An example is included in /example/ containing the SOFIA data of RCW120 used in the afor mentioned paper along with example scripts describing the full implementation of our code. The majority of parameter tweaking can be performed within 'rcw120-params.txt' which is continuously called during the procedure. 
+An example is included in /example/ containing the SOFIA data of RCW120 used in Tiwari et al. (subm. to ApJ) along with example scripts describing the full implementation of our code. The majority of parameter tweaking can be performed within 'rcw120-params.txt' which is continuously called during the procedure. 
 
 --
 
@@ -15,16 +15,16 @@ An example is included in /example/ containing the SOFIA data of RCW120 used in 
 
 ### Preparation
 
-Almost all functions of astroGMM take various parameters as inputs which are assumed to be handled from a single dictionary. In /example/ all these named parameters are introduced in 'params_readme.txt' and example parameters as in the paper for RCW120 are given in 'rcw120-params.txt'. If using astroGMM one should carefully read through the parameters readme and adjust values accordingly. The most important parameters are
+Almost all functions of astroGMM take various parameters as inputs which are assumed to be handled from a single dictionary. In /example/ all these named parameters are introduced in 'params_readme.txt' and example parameters as in Tiwari et al. (subm. to ApJ) for RCW120 are given in 'rcw120-params.txt'. When using astroGMM one should carefully read through the parameters readme and adjust values accordingly. The most important parameters are
 
 - 'hdul_name', 'data_path': These should point to the .fits file relative to the directory from which the script is run
 - 'results_path': Should point towards the directory where fit results and figures will be saved
 - 'rms': RMS noise of the cube
 - 'vel_min' and 'vel_max': Should encompass the window of emission in km/s
 - 'save_txt': Either provide a fitting savename, or can be set to 'none' for dynamic naming.
-- 'num_clusters': Can optimally be determined using the n_input vs n_output method introduced in the paper using the same parameter file and the example script provided as 'ninput-rcw120.py'. Do this only after you are satisfied with all other parameters.
+- 'num_clusters': Can optimally be determined using the n_input vs n_output method introduced in Tiwari et al. (subm. to ApJ) using the same parameter file and the example script provided as 'ninput-rcw120.py'. Do this only after you are satisfied with all other parameters.
 
-For the rest we recommend reading the associated paper and the parameter README.
+For the rest we recommend reading Tiwari et al. (subm. to ApJ) and the parameter README.
 
 ### Fitting
 
@@ -56,5 +56,5 @@ The complete GMM fitting procedure takes the following steps
     - All normalization/dimensionality reduction steps to be performed on raw data to increase model performance. The function 'improve_nans' is required as it both removes NaN values (PyGMMis breaks if it encounters these) and reshapes the datacube into the correct form.
 
  - plot.py
-    - Plotting code following the style from our paper, relatively straightforward.
+    - Plotting code following the style from Tiwari et al. (subm. to ApJ), relatively straightforward.
 
