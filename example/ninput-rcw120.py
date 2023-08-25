@@ -33,14 +33,14 @@ def main():
 
     hdul = fits.open(params['data_path']+params['hdul_name'])
 
-    # Preproces the data (identical to full_run( ))
+    # Preprocess the data (identical to full_run( ))
     # Following the steps of the paper
     # 1. Cut out dimensions outside of velocity range
     chop_hdul = astrokit.chop_cube(np.float64(params['vel_min']), 
                                    np.float64(params['vel_max']),
                                    hdul)  
 
-    # 2. Apply dimensionality redution and normalization
+    # 2. Apply dimensionality reduction and normalization
     # This takes a hdul object as input and returns a numpy array
     masked_data = remove_nans(chop_hdul)
     reduced_data = reduce_dimensions(masked_data, params)

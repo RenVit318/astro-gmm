@@ -14,8 +14,9 @@ def remove_nans(hdul):
     """Remove all lines of sight where any channel along it has a NaN value.
     This assumes that axis the velocity/frequency axis"""
     mask = np.isfinite(hdul[0].data).all(axis=0)
-    masked_data = hdul[0].data[:, mask].T # Transpose to comply with PyGMMis (N, D) requirement
+    masked_data = hdul[0].data[:, mask].T  # Transpose to comply with PyGMMis (N, D) requirement
     return masked_data 
+
 
 def reduce_dimensions(data, params):
     """Receives a HDUL and applies some dimensionality reduction algorithm to it.
@@ -34,10 +35,10 @@ def reduce_dimensions(data, params):
 
     # Could update to match-case but requires Python >3.10
     if method == 'none':
-        return data 
+        return data
+
     else:
         raise NotImplementedError(f"Unknown Dim Reduction Method: {params['reduce_method']}. Please check config file")
-
 
 
 def normalize(data, params):
@@ -48,6 +49,17 @@ def normalize(data, params):
     # Could update to match-case but requires Python >3.10
     if method == 'none':
         return data
+
+    elif method == 'mean': # subtract mean from data
+        return data - np.mean(data, axis=0)
+
+    elif method == 'min-max':
+        normed_data = data
+        for i in range(len(data)):  # Normalize each spectrum separately between 0 and 1
+            spec = data[i, :]
+            normed_data[i, :] = (spec - np.min(spec)) / (np.max(spec) - np.min(spec))
+        return normed_data
+
     else:
         raise NotImplementedError(f"Unknown Normalization Method: {params['norm_method']}. Please check config file")
 
